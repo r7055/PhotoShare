@@ -1,6 +1,7 @@
 ﻿using PhotoShare.Core.DTOs;
 using PhotoShare.Core.IRepositories;
-using PhotoShare.Data.Models;
+using PhotoShare.Core.IServices;
+using PhotoShare.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PhotoShare.Service.Services
 {
-    public class UserService
+    public class UserService:IUserService
     {
         private readonly IUserRepository _userRepository;
 
@@ -41,6 +42,31 @@ namespace PhotoShare.Service.Services
                 LastName = u.LastName,
                 Email = u.Email
             });
+        }
+
+        public Task<IEnumerable<User>> GetAllAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<User> GetByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task CreateAsync(User tag)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateAsync(User tag)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteAsync(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 

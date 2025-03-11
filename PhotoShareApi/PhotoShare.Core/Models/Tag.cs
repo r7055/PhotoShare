@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PhotoShare.Data.Models;
+namespace PhotoShare.Core.Models;
 
 public partial class Tag
 {

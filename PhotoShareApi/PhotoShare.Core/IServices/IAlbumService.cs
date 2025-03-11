@@ -1,4 +1,5 @@
 ﻿using PhotoShare.Core.IRepositories;
+using PhotoShare.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,12 +8,8 @@ using System.Threading.Tasks;
 
 namespace PhotoShare.Core.IServices
 {
-    public interface IAlbumService
+    public interface IAlbumService: IService<Album>
     {
-        Task<IEnumerable<Photo>> GetAllPhotosAsync();
-        Task<Photo> GetPhotoByIdAsync(int id);
-        Task CreatePhotoAsync(Photo photo);
-        Task UpdatePhotoAsync(Photo photo);
-        Task DeletePhotoAsync(int id);
+       
     }
 }

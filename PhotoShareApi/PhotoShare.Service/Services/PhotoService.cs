@@ -1,6 +1,7 @@
 ﻿using PhotoShare.Core.DTOs;
 using PhotoShare.Core.IRepositories;
-using PhotoShare.Data.Models;
+using PhotoShare.Core.IServices;
+using PhotoShare.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PhotoShare.Service.Services
 {
-    public class PhotoService
+    public class PhotoService:IPhotoService
     {
         private readonly IPhotoRepository _photoRepository;
 
@@ -42,6 +43,31 @@ namespace PhotoShare.Service.Services
         public async Task DeletePhoto(int id)
         {
             await _photoRepository.DeleteAsync(id);
+        }
+
+        public Task<IEnumerable<Photo>> GetAllAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Photo> GetByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task CreateAsync(Photo tag)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateAsync(Photo tag)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteAsync(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 
