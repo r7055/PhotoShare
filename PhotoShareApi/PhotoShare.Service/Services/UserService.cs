@@ -13,10 +13,14 @@ namespace PhotoShare.Service.Services
     public class UserService:IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IPhotoRepository _photoRepository;
+        private readonly IAlbumRepository _albumRepository;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, IPhotoRepository photoRepository, IAlbumRepository albumRepository)
         {
             _userRepository = userRepository;
+            _photoRepository = photoRepository;
+            _albumRepository = albumRepository;
         }
 
         public async Task<UserDto> RegisterUser(UserDto userDto)
@@ -66,7 +70,26 @@ namespace PhotoShare.Service.Services
 
         public async Task DeleteAsync(int id)
         {
-            await _userRepository.DeleteAsync(id);
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user != null)
+            {
+                // Delete all photos associated with the user
+                var photos = await _photoRepository.GetAllAsync();
+                foreach (var photo in photos.Where(p => p.UserId == id))
+                {
+                    await _photoRepository.DeleteAsync(photo.Id);
+                }
+
+                // Delete all albums associated with the user
+                var albums = await _albumRepository.GetAllAsync();
+                foreach (var album in albums.Where(a => a.UserId == id))
+                {
+                    await _albumRepository.DeleteAsync(album.Id);
+                }
+
+                // Delete the user
+                await _userRepository.DeleteAsync(id);
+            }
         }
 
     }
