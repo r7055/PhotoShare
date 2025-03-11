@@ -26,9 +26,19 @@ namespace PhotoShare.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
-            var users = await _userService.GetAllUsers();
+            var users = await _userService.GetAllAsync();
             return Ok(users);
         }
-    }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserById(int id)
+        {
+            var user = await _userService.GetByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
+    }
 }

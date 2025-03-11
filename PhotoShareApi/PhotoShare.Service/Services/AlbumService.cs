@@ -41,36 +41,31 @@ namespace PhotoShare.Service.Services
                 Description = a.Description
             });
         }
+        public async Task<IEnumerable<Album>> GetAllAsync()
+        {
+            return await _albumRepository.GetAllAsync();
+        }
 
-        public async Task DeleteAlbum(int id)
+        public async Task<Album> GetByIdAsync(int id)
+        {
+            return await _albumRepository.GetByIdAsync(id);
+        }
+
+        public async Task CreateAsync(Album album)
+        {
+            await _albumRepository.AddAsync(album);
+        }
+
+        public async Task UpdateAsync(Album album)
+        {
+            await _albumRepository.UpdateAsync(album);
+        }
+
+        public async Task DeleteAsync(int id)
         {
             await _albumRepository.DeleteAsync(id);
         }
 
-        public Task<IEnumerable<Album>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Album> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task CreateAsync(Album tag)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateAsync(Album tag)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
     }
 
 }

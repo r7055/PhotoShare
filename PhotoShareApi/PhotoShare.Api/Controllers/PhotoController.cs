@@ -30,10 +30,20 @@ namespace PhotoShare.Api.Controllers
             return Ok(photos);
         }
 
+        [HttpGet("photo/{id}")]
+        public async Task<IActionResult> GetPhotoById(int id)
+        {
+            var photo = await _photoService.GetByIdAsync(id);
+            if (photo == null)
+            {
+                return NotFound();
+            }
+            return Ok(photo);
+        }
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePhoto(int id)
         {
-            await _photoService.DeletePhoto(id);
+            await _photoService.DeleteAsync(id);
             return NoContent();
         }
     }

@@ -40,35 +40,31 @@ namespace PhotoShare.Service.Services
             });
         }
 
-        public async Task DeletePhoto(int id)
+        public async Task<IEnumerable<Photo>> GetAllAsync()
+        {
+            return await _photoRepository.GetAllAsync();
+        }
+
+        public async Task<Photo> GetByIdAsync(int id)
+        {
+            return await _photoRepository.GetByIdAsync(id);
+        }
+
+        public async Task CreateAsync(Photo photo)
+        {
+            await _photoRepository.AddAsync(photo);
+        }
+
+        public async Task UpdateAsync(Photo photo)
+        {
+            await _photoRepository.UpdateAsync(photo);
+        }
+
+        public async Task DeleteAsync(int id)
         {
             await _photoRepository.DeleteAsync(id);
         }
 
-        public Task<IEnumerable<Photo>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Photo> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task CreateAsync(Photo tag)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateAsync(Photo tag)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
     }
 
 }

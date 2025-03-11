@@ -32,42 +32,43 @@ namespace PhotoShare.Service.Services
             return userDto; // החזרת ה-DTO שנוצר
         }
 
-        public async Task<IEnumerable<UserDto>> GetAllUsers()
+        //public async Task<IEnumerable<UserDto>> GetAllUsers()
+        //{
+        //    var users = await _userRepository.GetAllAsync();
+        //    return users.Select(u => new UserDto
+        //    {
+        //        Id = u.Id,
+        //        FirstName = u.FirstName,
+        //        LastName = u.LastName,
+        //        Email = u.Email
+        //    });
+        //}
+
+        public async Task<IEnumerable<User>> GetAllAsync()
         {
-            var users = await _userRepository.GetAllAsync();
-            return users.Select(u => new UserDto
-            {
-                Id = u.Id,
-                FirstName = u.FirstName,
-                LastName = u.LastName,
-                Email = u.Email
-            });
+            return await _userRepository.GetAllAsync();
         }
 
-        public Task<IEnumerable<User>> GetAllAsync()
+        public async Task<User> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _userRepository.GetByIdAsync(id);
         }
 
-        public Task<User> GetByIdAsync(int id)
+        public async Task CreateAsync(User user)
         {
-            throw new NotImplementedException();
+            await _userRepository.AddAsync(user);
         }
 
-        public Task CreateAsync(User tag)
+        public async Task UpdateAsync(User user)
         {
-            throw new NotImplementedException();
+            await _userRepository.UpdateAsync(user);
         }
 
-        public Task UpdateAsync(User tag)
+        public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            await _userRepository.DeleteAsync(id);
         }
 
-        public Task DeleteAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
     }
 
 }
