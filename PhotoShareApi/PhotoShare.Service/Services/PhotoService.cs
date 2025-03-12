@@ -1,4 +1,5 @@
-﻿using PhotoShare.Core.DTOs;
+﻿using AutoMapper;
+using PhotoShare.Core.DTOs;
 using PhotoShare.Core.IRepositories;
 using PhotoShare.Core.IServices;
 using PhotoShare.Core.Models;
@@ -12,27 +13,25 @@ namespace PhotoShare.Service.Services
 {
     public class PhotoService:IPhotoService
     {
-        private readonly IPhotoRepository _photoRepository;
+        private readonly IRepositoryManager _repositoryManager;
+        private readonly IMapper _mapper;
 
-        public PhotoService(IPhotoRepository photoRepository)
+        public PhotoService(IRepositoryManager repositoryManager,IMapper mapper)
         {
-            _photoRepository = photoRepository;
+            _repositoryManager = repositoryManager;
+            _mapper = mapper;
         }
 
-        public async Task<PhotoDto> UploadPhoto(PhotoDto photoDto)
-        {
-            var photo = new Photo
-            {
-                Url = photoDto.Url,
-                UploadedAt = DateTime.Now
-            };
-            await _photoRepository.AddAsync(photo);
-            return photoDto; // החזרת ה-DTO שנוצר
-        }
+        //public async Task<PhotoDto> UploadPhoto(PhotoDto photoDto)
+        //{
+        //    var photo=_mapper.Map<Photo>(photoDto);
+        //   var res= await _repositoryManager.Photo.AddAsync(photo);
+        //    return _mapper.Map<PhotoDto>(res);
+        //}
 
         public async Task<IEnumerable<PhotoDto>> GetPhotosByAlbumId(int albumId)
         {
-            var photos = await _photoRepository.GetAllAsync();
+            var photos = await _repositoryManager.Photo.GetAllAsync();
             return photos.Where(p => p.Albums.Any(a => a.Id == albumId)).Select(p => new PhotoDto
             {
                 Id = p.Id,
@@ -40,29 +39,33 @@ namespace PhotoShare.Service.Services
             });
         }
 
-        public async Task<IEnumerable<Photo>> GetAllAsync()
+        public async Task<IEnumerable<PhotoDto>> GetAllAsync()
         {
-            return await _photoRepository.GetAllAsync();
+            var photos = await _repositoryManager.Photo.GetAllAsync();
+            return _mapper.Map<IEnumerable<PhotoDto>>(photos);
         }
 
-        public async Task<Photo> GetByIdAsync(int id)
+        public async Task<PhotoDto> GetByIdAsync(int id)
         {
-            return await _photoRepository.GetByIdAsync(id);
+            var photo = await _repositoryManager.Photo.GetByIdAsync(id);
+            return _mapper.Map<PhotoDto>(photo);
         }
 
-        public async Task CreateAsync(Photo photo)
+        public async Task CreateAsync(PhotoDto photoDto)
         {
-            await _photoRepository.AddAsync(photo);
+            var photo= _mapper.Map<Photo>(photoDto);
+            await _repositoryManager.Photo.AddAsync(photo);
         }
 
-        public async Task UpdateAsync(Photo photo)
+        public async Task UpdateAsync(PhotoDto photoDto)
         {
-            await _photoRepository.UpdateAsync(photo);
+            var photo = _mapper.Map<Photo>(photoDto);
+            await _repositoryManager.Photo.UpdateAsync(photo);
         }
 
         public async Task DeleteAsync(int id)
         {
-            await _photoRepository.DeleteAsync(id);
+            await _repositoryManager.Photo.DeleteAsync(id);
         }
 
     }

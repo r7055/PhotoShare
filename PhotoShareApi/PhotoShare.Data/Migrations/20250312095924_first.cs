@@ -7,7 +7,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace PhotoShare.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class firstMigration : Migration
+    public partial class first : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

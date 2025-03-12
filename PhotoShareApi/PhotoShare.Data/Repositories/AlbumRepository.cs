@@ -1,4 +1,5 @@
 ﻿//using Microsoft.EntityFrameworkCore;//??
+using PhotoShare.Core.DTOs;
 using PhotoShare.Core.IRepositories;
 using PhotoShare.Core.Models;
 using System;

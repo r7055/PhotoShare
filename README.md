@@ -30,7 +30,7 @@ PhotoShare נועדה לסייע למשתמשים לנהל ולארגן את ה�
 
 1. Clone את המאגר:
    ```bash
-   git clone https://github.com/username/photoshareclient.git
+   git clone https://github.com/r7055/photo-share-client.git
    ```
 2. התקן את התלויות:
    ```bash
@@ -83,7 +83,7 @@ async function uploadImage(file) {
 
 ## רשימת בעיות (Issues)
 
-לרשימת בעיות, אנא בקרו בדף הבעיות בפרויקט ב-GitHub: [Issues](https://github.com/username/photoshareclient/issues)
+לרשימת בעיות, אנא בקרו בדף הבעיות בפרויקט ב-GitHub: [Issues](https://github.com/r7055/photo-share-client/issues)
 
 ## רישיון
 

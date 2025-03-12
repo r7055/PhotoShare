@@ -1,4 +1,5 @@
-﻿using PhotoShare.Core.IRepositories;
+﻿using PhotoShare.Core.DTOs;
+using PhotoShare.Core.IRepositories;
 using PhotoShare.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PhotoShare.Core.IServices
 {
-    public interface IAlbumService: IService<Album>
+    public interface IAlbumService: IService<AlbumDto>
     {
        
     }

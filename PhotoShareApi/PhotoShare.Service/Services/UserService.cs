@@ -1,7 +1,9 @@
-﻿using PhotoShare.Core.DTOs;
+﻿using AutoMapper;
+using PhotoShare.Core.DTOs;
 using PhotoShare.Core.IRepositories;
 using PhotoShare.Core.IServices;
 using PhotoShare.Core.Models;
+using PhotoShare.Data.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,83 +14,72 @@ namespace PhotoShare.Service.Services
 {
     public class UserService:IUserService
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IPhotoRepository _photoRepository;
-        private readonly IAlbumRepository _albumRepository;
+        private readonly IRepositoryManager _repositoryManager;
+        private readonly IMapper _mapper;
 
-        public UserService(IUserRepository userRepository, IPhotoRepository photoRepository, IAlbumRepository albumRepository)
+        public UserService(IRepositoryManager repositoryManager, IMapper mapper)
         {
-            _userRepository = userRepository;
-            _photoRepository = photoRepository;
-            _albumRepository = albumRepository;
+            _repositoryManager = repositoryManager;
+            _mapper = mapper;
         }
 
-        public async Task<UserDto> RegisterUser(UserDto userDto)
-        {
-            var user = new User
-            {
-                FirstName = userDto.FirstName,
-                LastName = userDto.LastName,
-                Email = userDto.Email,
-                CreatedAt = DateTime.Now
-            };
-            await _userRepository.AddAsync(user);
-            return userDto; // החזרת ה-DTO שנוצר
-        }
-
-        //public async Task<IEnumerable<UserDto>> GetAllUsers()
+        //public async Task<UserDto> RegisterUser(UserDto userDto)
         //{
-        //    var users = await _userRepository.GetAllAsync();
-        //    return users.Select(u => new UserDto
-        //    {
-        //        Id = u.Id,
-        //        FirstName = u.FirstName,
-        //        LastName = u.LastName,
-        //        Email = u.Email
-        //    });
+        //    var user = _mapper.Map<User>(userDto); // המרת ה-DTO למודל
+        //    var res = await _repositoryManager.User.AddAsync(user);
+        //    return userDto; // החזרת ה-DTO שנוצר
         //}
 
-        public async Task<IEnumerable<User>> GetAllAsync()
+   
+
+        public async Task<IEnumerable<UserDto>> GetAllAsync()
         {
-            return await _userRepository.GetAllAsync();
+             var res = await _repositoryManager.User.GetAllAsync();
+            return _mapper.Map < IEnumerable <UserDto>>(res);
         }
 
-        public async Task<User> GetByIdAsync(int id)
+        public async Task<UserDto> GetByIdAsync(int id)
         {
-            return await _userRepository.GetByIdAsync(id);
+            var res = await _repositoryManager.User.GetByIdAsync(id);
+            return _mapper.Map<UserDto>(res);
+
         }
 
-        public async Task CreateAsync(User user)
+        public async Task CreateAsync(UserDto userDto)
         {
-            await _userRepository.AddAsync(user);
+            var user = _mapper.Map<User>(userDto);
+            await _repositoryManager.User.AddAsync(user);
         }
 
-        public async Task UpdateAsync(User user)
+        public async Task UpdateAsync(UserDto userDto)
         {
-            await _userRepository.UpdateAsync(user);
+            var user = _mapper.Map<User>(userDto);
+
+            await _repositoryManager.User.UpdateAsync(user);
         }
 
         public async Task DeleteAsync(int id)
         {
-            var user = await _userRepository.GetByIdAsync(id);
+            var user = await _repositoryManager.User.GetByIdAsync(id);
             if (user != null)
             {
                 // Delete all photos associated with the user
-                var photos = await _photoRepository.GetAllAsync();
+                //var photos = await _photoRepository.GetAllAsync();
+                var photos = await _repositoryManager.Photo.GetAllAsync();
                 foreach (var photo in photos.Where(p => p.UserId == id))
                 {
-                    await _photoRepository.DeleteAsync(photo.Id);
+                    await _repositoryManager.Photo.DeleteAsync(photo.Id);
                 }
 
                 // Delete all albums associated with the user
-                var albums = await _albumRepository.GetAllAsync();
+                var albums = await _repositoryManager.Album.GetAllAsync();
                 foreach (var album in albums.Where(a => a.UserId == id))
                 {
-                    await _albumRepository.DeleteAsync(album.Id);
+                    await _repositoryManager.Album.DeleteAsync(album.Id);
                 }
 
                 // Delete the user
-                await _userRepository.DeleteAsync(id);
+                await _repositoryManager.User.DeleteAsync(id);
             }
         }
 

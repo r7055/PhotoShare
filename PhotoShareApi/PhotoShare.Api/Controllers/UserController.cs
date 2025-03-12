@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PhotoShare.Api.PostModels;
 using PhotoShare.Core.DTOs;
+using PhotoShare.Core.IServices;
 using PhotoShare.Service.Services;
 
 namespace PhotoShare.Api.Controllers
@@ -9,16 +12,19 @@ namespace PhotoShare.Api.Controllers
     [Route("api/users")]
     public class UserController : ControllerBase
     {
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
+        private readonly IMapper _mapper;
 
-        public UserController(UserService userService)
+        public UserController(IUserService userService,IMapper mapper)
         {
             _userService = userService;
+            _mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterUser([FromBody] UserDto userDto)
+        public async Task<IActionResult> RegisterUser([FromBody] UserPostModel userPostModel)
         {
+            var userDto = _mapper.Map<UserDto>(userPostModel);
             var createdUser = await _userService.RegisterUser(userDto);
             return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
         }

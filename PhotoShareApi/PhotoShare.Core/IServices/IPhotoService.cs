@@ -1,4 +1,5 @@
-﻿using PhotoShare.Core.Models;
+﻿using PhotoShare.Core.DTOs;
+using PhotoShare.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PhotoShare.Core.IServices
 {
-    public interface IPhotoService:IService<Photo>
+    public interface IPhotoService:IService<PhotoDto>
     {
       
     }

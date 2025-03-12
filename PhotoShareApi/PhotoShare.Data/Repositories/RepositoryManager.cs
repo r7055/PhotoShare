@@ -7,19 +7,19 @@ using System.Threading.Tasks;
 
 namespace PhotoShare.Data.Repositories
 {
-    internal class RepositoryManager : IRepositoryManager
+    public class RepositoryManager : IRepositoryManager
     {
         PhotoShareContext _photoShareContext;
 
-        public IAlbumRepository Album {  get; }
+        public IAlbumRepository Album { get; }
 
-        public IPhotoRepository Photo {  get; }
+        public IPhotoRepository Photo { get; }
 
-        public IUserRepository User {  get; }
+        public IUserRepository User { get; }
 
-        public ITagRepository Tag {  get; }
+        public ITagRepository Tag { get; }
 
-        RepositoryManager(PhotoShareContext photoShareContext, IAlbumRepository album, IPhotoRepository photo, IUserRepository user, ITagRepository tag)
+        public RepositoryManager(PhotoShareContext photoShareContext, IAlbumRepository album, IPhotoRepository photo, IUserRepository user, ITagRepository tag)
         {
             _photoShareContext = photoShareContext;
             Album = album;

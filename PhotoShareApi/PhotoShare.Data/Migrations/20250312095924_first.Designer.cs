@@ -11,8 +11,8 @@ using PhotoShare.Data;
 namespace PhotoShare.Data.Migrations
 {
     [DbContext(typeof(PhotoShareContext))]
-    [Migration("20250311220500_firstMigration")]
-    partial class firstMigration
+    [Migration("20250312095924_first")]
+    partial class first
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

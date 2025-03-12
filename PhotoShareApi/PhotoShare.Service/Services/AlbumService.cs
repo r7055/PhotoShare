@@ -1,4 +1,5 @@
-﻿using PhotoShare.Core.DTOs;
+﻿using AutoMapper;
+using PhotoShare.Core.DTOs;
 using PhotoShare.Core.IRepositories;
 using PhotoShare.Core.IServices;
 using PhotoShare.Core.Models;
@@ -10,30 +11,27 @@ using System.Threading.Tasks;
 
 namespace PhotoShare.Service.Services
 {
-    public class AlbumService:IAlbumService
+    public class AlbumService : IAlbumService
     {
-        private readonly IAlbumRepository _albumRepository;
+        private readonly IRepositoryManager _repositoryManager;
+        private readonly IMapper _mapper;
 
-        public AlbumService(IAlbumRepository albumRepository)
+        public AlbumService(IRepositoryManager repositoryManager, IMapper mapper)
         {
-            _albumRepository = albumRepository;
+            _repositoryManager = repositoryManager;
+            _mapper = mapper;
         }
 
         public async Task<AlbumDto> CreateAlbum(AlbumDto albumDto)
         {
-            var album = new Album
-            {
-                Title = albumDto.Title,
-                Description = albumDto.Description,
-                CreatedAt = DateTime.Now
-            };
-            await _albumRepository.AddAsync(album);
+            var album = _mapper.Map<Album>(albumDto);
+            await _repositoryManager.Album.AddAsync(album);
             return albumDto;
         }
 
         public async Task<IEnumerable<AlbumDto>> GetAllAlbums()
         {
-            var albums = await _albumRepository.GetAllAsync();
+            var albums = await _repositoryManager.Album.GetAllAsync();
             return albums.Select(a => new AlbumDto
             {
                 Id = a.Id,
@@ -41,29 +39,33 @@ namespace PhotoShare.Service.Services
                 Description = a.Description
             });
         }
-        public async Task<IEnumerable<Album>> GetAllAsync()
+        public async Task<IEnumerable<AlbumDto>> GetAllAsync()
         {
-            return await _albumRepository.GetAllAsync();
+            var albums = await _repositoryManager.Album.GetAllAsync();
+            return _mapper.Map<IEnumerable<AlbumDto>>(albums);
         }
 
-        public async Task<Album> GetByIdAsync(int id)
+        public async Task<AlbumDto> GetByIdAsync(int id)
         {
-            return await _albumRepository.GetByIdAsync(id);
+            var album = await _repositoryManager.Album.GetByIdAsync(id);
+            return _mapper.Map<AlbumDto>(album);
         }
 
-        public async Task CreateAsync(Album album)
+        public async Task CreateAsync(AlbumDto albumDto)
         {
-            await _albumRepository.AddAsync(album);
+            var album = _mapper.Map<Album>(albumDto);
+            await _repositoryManager.Album.AddAsync(album);
         }
 
-        public async Task UpdateAsync(Album album)
+        public async Task UpdateAsync(AlbumDto albumDto)
         {
-            await _albumRepository.UpdateAsync(album);
+            var album = _mapper.Map<Album>(albumDto);
+            await _repositoryManager.Album.UpdateAsync(album);
         }
 
         public async Task DeleteAsync(int id)
         {
-            await _albumRepository.DeleteAsync(id);
+            await _repositoryManager.Album.DeleteAsync(id);
         }
 
     }

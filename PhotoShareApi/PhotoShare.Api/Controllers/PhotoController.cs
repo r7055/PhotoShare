@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PhotoShare.Api.PostModels;
 using PhotoShare.Core.DTOs;
+using PhotoShare.Core.IServices;
 using PhotoShare.Service.Services;
 
 namespace PhotoShare.Api.Controllers
@@ -9,16 +12,19 @@ namespace PhotoShare.Api.Controllers
     [Route("api/photos")]
     public class PhotoController : ControllerBase
     {
-        private readonly PhotoService _photoService;
+        private readonly IPhotoService _photoService;
+        private readonly IMapper _mapper;
 
-        public PhotoController(PhotoService photoService)
+        public PhotoController(IPhotoService photoService,IMapper mapper)
         {
             _photoService = photoService;
+            _mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadPhoto([FromBody] PhotoDto photoDto)
+        public async Task<IActionResult> UploadPhoto([FromBody] PhotoPostModel photoPostModel)
         {
+            var photoDto = _mapper.Map<PhotoDto>(photoPostModel);
             var createdPhoto = await _photoService.UploadPhoto(photoDto);
             return CreatedAtAction(nameof(GetPhotoById), new { id = createdPhoto.Id }, createdPhoto);
         }

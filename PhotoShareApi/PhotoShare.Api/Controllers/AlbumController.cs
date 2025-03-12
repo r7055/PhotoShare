@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PhotoShare.Api.PostModels;
 using PhotoShare.Core.DTOs;
+using PhotoShare.Core.IServices;
 using PhotoShare.Service.Services;
 
 namespace PhotoShare.Api.Controllers
@@ -9,24 +12,27 @@ namespace PhotoShare.Api.Controllers
     [Route("api/albums")]
     public class AlbumController : ControllerBase
     {
-        private readonly AlbumService _albumService;
+        private readonly IAlbumService _albumService;
+        private readonly IMapper _mapper;
 
-        public AlbumController(AlbumService albumService)
+        public AlbumController(IAlbumService albumService,IMapper mapper)
         {
             _albumService = albumService;
+            _mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAlbum([FromBody] AlbumDto albumDto)
+        public async Task<IActionResult> CreateAlbum([FromBody] AlbumPostModel albumPostModel)
         {
-            var createdAlbum = await _albumService.CreateAlbum(albumDto);
+            var albumDto = _mapper.Map<AlbumDto>(albumPostModel);
+            var createdAlbum = await _albumService.CreateAsync(albumDto);
             return CreatedAtAction(nameof(GetAlbumById), new { id = createdAlbum.Id }, createdAlbum);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllAlbums()
         {
-            var albums = await _albumService.GetAllAlbums();
+            var albums = await _albumService.GetAllAsync();
             return Ok(albums);
         }
 
