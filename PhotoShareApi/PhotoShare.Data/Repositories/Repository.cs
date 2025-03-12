@@ -17,9 +17,10 @@ namespace PhotoShare.Data.Repositories
         {
             _dbSet = context.Set<T>();
         }
-        public async Task AddAsync(T entity)
+        public async Task<T> AddAsync(T entity)
         {
-            await _dbSet.AddAsync(entity);
+           var res= await _dbSet.AddAsync(entity);
+            return res.Entity;
         }
 
         public async Task DeleteAsync(int id)
