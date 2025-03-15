@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace PhotoShare.Core.IServices
 {
-    public interface IPhotoService:IService<PhotoDto>
+    public interface IPhotoService : IService<PhotoDto>
     {
-      
+        Task<IEnumerable<PhotoDto>> GetPhotosByAlbumId(int albumId);
+        Task UploadPhoto(PhotoDto photoDto);
     }
 }

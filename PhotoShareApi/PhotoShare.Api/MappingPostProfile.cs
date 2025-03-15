@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using PhotoShare.Api.PostModels;
 using PhotoShare.Core.DTOs;
+using PhotoShare.Core.Models;
 
 namespace PhotoShare.Api
 {

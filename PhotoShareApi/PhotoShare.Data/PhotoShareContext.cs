@@ -10,6 +10,7 @@ public class PhotoShareContext : DbContext
     public PhotoShareContext(DbContextOptions<PhotoShareContext> options)
         : base(options)
     {
+
     }
 
     public virtual DbSet<Album> Albums { get; set; }

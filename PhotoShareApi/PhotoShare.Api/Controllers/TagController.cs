@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Igor.Gateway.Dtos.Tags;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PhotoShare.Api.PostModels;

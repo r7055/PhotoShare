@@ -1,14 +1,17 @@
 
 
 using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
+using PhotoShare.Api;
 using PhotoShare.Core.IRepositories;
 using PhotoShare.Core.IServices;
 using PhotoShare.Data;
 using PhotoShare.Data.Repositories;
 using PhotoShare.Service.Services;
 using System.Configuration;
+using PhotoShare.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,12 +32,16 @@ builder.Services.AddScoped<ITagService,TagService>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
 
+builder.Services.AddAutoMapper(typeof(MappingPostProfile), typeof(MappingProfile));
 
 builder.Services.AddControllers();
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddSwaggerGen();
+
 var connetionString = builder.Configuration.GetConnectionString("PhotoShareContext");  
-//var connetionString = "server=localhost;database=photo_share_db;user=root;password=1234;";
 builder.Services.AddDbContext<PhotoShareContext>(options =>
     options.UseMySql(connetionString, ServerVersion.AutoDetect(connetionString),options=>options.CommandTimeout(60)));
 
@@ -57,8 +64,13 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
-    app.MapOpenApi();//??
-    
+    app.UseSwagger(); // הוסף כאן
+    app.UseSwaggerUI(c => // הוסף כאן
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "PhotoShare API V1");
+        c.RoutePrefix = string.Empty; // כדי לגשת ל-Swagger ב-root
+    });
+
 }
 else
 {

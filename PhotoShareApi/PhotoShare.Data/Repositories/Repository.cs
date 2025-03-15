@@ -11,7 +11,7 @@ namespace PhotoShare.Data.Repositories
     public class Repository<T> : IRepository<T> where T : class
     {
 
-        private readonly DbSet<T> _dbSet;
+        protected readonly DbSet<T> _dbSet;
 
         public Repository(PhotoShareContext context)
         {
@@ -39,7 +39,8 @@ namespace PhotoShare.Data.Repositories
 
         public async Task<T> GetByIdAsync(int id)
         {
-           return await GetByIdAsync(id);
+          var entity = await _dbSet.FindAsync(id);
+            return entity;
         }
 
         public async Task UpdateAsync(T entity)

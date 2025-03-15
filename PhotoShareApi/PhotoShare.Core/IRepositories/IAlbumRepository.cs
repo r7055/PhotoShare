@@ -10,6 +10,7 @@ namespace PhotoShare.Core.IRepositories
 {
     public interface IAlbumRepository : IRepository<Album>
     {
-
+        Task<Album> GetAlbumIncludePhotosAsync(int albumId);
+        
     }
 }

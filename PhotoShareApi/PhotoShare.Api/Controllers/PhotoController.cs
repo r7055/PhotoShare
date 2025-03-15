@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Amazon.S3;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PhotoShare.Api.PostModels;
@@ -21,12 +22,26 @@ namespace PhotoShare.Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> UploadPhoto([FromBody] PhotoPostModel photoPostModel)
+        [HttpPost("upload")]
+        public async Task<IActionResult> UploadPhoto([FromBody] PhotoDto photoDto)
         {
-            var photoDto = _mapper.Map<PhotoDto>(photoPostModel);
-            var createdPhoto = await _photoService.UploadPhoto(photoDto);
-            return CreatedAtAction(nameof(GetPhotoById), new { id = createdPhoto.Id }, createdPhoto);
+            try
+            {
+                await _photoService.UploadPhoto(photoDto);
+                return Ok(new { message = "הקובץ הועלה בהצלחה!", url = photoDto.Url });
+            }
+            catch (FileNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message }); // החזר שגיאת 404 אם הקובץ לא קיים
+            }
+            catch (AmazonS3Exception ex)
+            {
+                return StatusCode(500, new { message = "שגיאה בעת העלאת הקובץ ל-S3.", details = ex.Message }); // החזר שגיאה ל-S3
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "שגיאה כללית.", details = ex.Message }); // החזר שגיאה כללית
+            }
         }
 
         [HttpGet("{albumId}")]

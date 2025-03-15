@@ -34,10 +34,11 @@ namespace PhotoShare.Service.Services
             return _mapper.Map<TagDto>(tag);
         }
 
-        public async Task CreateAsync(TagDto tagDto)
+        public async Task<TagDto> CreateAsync(TagDto tagDto)
         {
             var tag = _mapper.Map<Tag>(tagDto);
-            await _repositoryManager.Tag.AddAsync(tag);
+            var res = await _repositoryManager.Tag.AddAsync(tag);
+           return _mapper.Map<TagDto>(res);
         }
 
         public async Task UpdateAsync(TagDto tagDto)

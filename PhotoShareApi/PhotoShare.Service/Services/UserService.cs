@@ -3,7 +3,6 @@ using PhotoShare.Core.DTOs;
 using PhotoShare.Core.IRepositories;
 using PhotoShare.Core.IServices;
 using PhotoShare.Core.Models;
-using PhotoShare.Data.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,21 +22,18 @@ namespace PhotoShare.Service.Services
             _mapper = mapper;
         }
 
-        //public async Task<UserDto> RegisterUser(UserDto userDto)
-        //{
-        //    var user = _mapper.Map<User>(userDto); // המרת ה-DTO למודל
-        //    var res = await _repositoryManager.User.AddAsync(user);
-        //    return userDto; // החזרת ה-DTO שנוצר
-        //}
-
-   
-
         public async Task<IEnumerable<UserDto>> GetAllAsync()
         {
              var res = await _repositoryManager.User.GetAllAsync();
             return _mapper.Map < IEnumerable <UserDto>>(res);
         }
-
+        public async Task<UserDto> RegisterUser(UserDto userDto)
+        {
+            var user = _mapper.Map<User>(userDto);
+            var res=await _repositoryManager.User.AddAsync(user);
+            await _repositoryManager.SaveAsync();
+            return _mapper.Map<UserDto>(res);
+        }
         public async Task<UserDto> GetByIdAsync(int id)
         {
             var res = await _repositoryManager.User.GetByIdAsync(id);
@@ -45,10 +41,11 @@ namespace PhotoShare.Service.Services
 
         }
 
-        public async Task CreateAsync(UserDto userDto)
+        public async Task<UserDto> CreateAsync(UserDto userDto)
         {
             var user = _mapper.Map<User>(userDto);
-            await _repositoryManager.User.AddAsync(user);
+            var res = await _repositoryManager.User.AddAsync(user);
+            return _mapper.Map<UserDto>(res);
         }
 
         public async Task UpdateAsync(UserDto userDto)
@@ -56,6 +53,7 @@ namespace PhotoShare.Service.Services
             var user = _mapper.Map<User>(userDto);
 
             await _repositoryManager.User.UpdateAsync(user);
+            await _repositoryManager.SaveAsync();
         }
 
         public async Task DeleteAsync(int id)
@@ -80,6 +78,7 @@ namespace PhotoShare.Service.Services
 
                 // Delete the user
                 await _repositoryManager.User.DeleteAsync(id);
+                await _repositoryManager.SaveAsync();
             }
         }
 

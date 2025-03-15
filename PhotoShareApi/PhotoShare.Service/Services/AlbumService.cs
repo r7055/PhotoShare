@@ -25,8 +25,8 @@ namespace PhotoShare.Service.Services
         public async Task<AlbumDto> CreateAlbum(AlbumDto albumDto)
         {
             var album = _mapper.Map<Album>(albumDto);
-            await _repositoryManager.Album.AddAsync(album);
-            return albumDto;
+           var res= await _repositoryManager.Album.AddAsync(album);
+            return _mapper.Map<AlbumDto>(res);
         }
 
         public async Task<IEnumerable<AlbumDto>> GetAllAlbums()
@@ -51,10 +51,11 @@ namespace PhotoShare.Service.Services
             return _mapper.Map<AlbumDto>(album);
         }
 
-        public async Task CreateAsync(AlbumDto albumDto)
+        public async Task<AlbumDto> CreateAsync(AlbumDto albumDto)
         {
             var album = _mapper.Map<Album>(albumDto);
-            await _repositoryManager.Album.AddAsync(album);
+           var res= await _repositoryManager.Album.AddAsync(album);
+            return _mapper.Map<AlbumDto>(res);
         }
 
         public async Task UpdateAsync(AlbumDto albumDto)
