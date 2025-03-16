@@ -12,6 +12,7 @@ namespace PhotoShare.Core.IRepositories
         IPhotoRepository Photo { get; }
         IUserRepository User { get; }
         ITagRepository Tag { get; }
+        IAuthRepository Auth { get; }
         Task SaveAsync();
     }
 }

@@ -27,13 +27,7 @@ namespace PhotoShare.Service.Services
              var res = await _repositoryManager.User.GetAllAsync();
             return _mapper.Map < IEnumerable <UserDto>>(res);
         }
-        public async Task<UserDto> RegisterUser(UserDto userDto)
-        {
-            var user = _mapper.Map<User>(userDto);
-            var res=await _repositoryManager.User.AddAsync(user);
-            await _repositoryManager.SaveAsync();
-            return _mapper.Map<UserDto>(res);
-        }
+     
         public async Task<UserDto> GetByIdAsync(int id)
         {
             var res = await _repositoryManager.User.GetByIdAsync(id);

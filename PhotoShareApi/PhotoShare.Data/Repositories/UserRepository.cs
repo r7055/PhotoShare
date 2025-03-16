@@ -1,4 +1,5 @@
-﻿using PhotoShare.Core.IRepositories;
+﻿using Microsoft.EntityFrameworkCore;
+using PhotoShare.Core.IRepositories;
 using PhotoShare.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,11 @@ namespace PhotoShare.Data.Repositories
     {
         public UserRepository(PhotoShareContext context) : base(context)
         {
+        }
+
+        public async Task<User> GetByUserEmailAsync(string userEmail)
+        {
+           return await _dbSet.FirstOrDefaultAsync(x => x.Email == userEmail);
         }
     }
 

@@ -23,7 +23,7 @@ public partial class User
 
     public DateTime? UpdatedAt { get; set; }
 
-    public string? Role { get; set; }
+    public virtual ICollection<Role> Roles { get; set; }
 
     public virtual ICollection<Album> Albums { get; set; } = new List<Album>();
 

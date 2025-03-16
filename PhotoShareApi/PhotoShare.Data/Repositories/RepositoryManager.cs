@@ -19,13 +19,16 @@ namespace PhotoShare.Data.Repositories
 
         public ITagRepository Tag { get; }
 
-        public RepositoryManager(PhotoShareContext photoShareContext, IAlbumRepository album, IPhotoRepository photo, IUserRepository user, ITagRepository tag)
+        public IAuthRepository Auth { get; }
+
+        public RepositoryManager(PhotoShareContext photoShareContext, IAlbumRepository album, IPhotoRepository photo, IUserRepository user, ITagRepository tag, IAuthRepository auth)
         {
             _photoShareContext = photoShareContext;
             Album = album;
             Photo = photo;
             User = user;
             Tag = tag;
+            Auth = auth;
         }
         public async Task SaveAsync()
         {

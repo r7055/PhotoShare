@@ -1,5 +1,3 @@
-
-
 using Microsoft.EntityFrameworkCore;
 using PhotoShare.Api;
 using PhotoShare.Core.IRepositories;
@@ -8,6 +6,9 @@ using PhotoShare.Data;
 using PhotoShare.Data.Repositories;
 using PhotoShare.Service.Services;
 using PhotoShare.Core;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,11 +17,13 @@ builder.Services.AddScoped<IAlbumRepository, AlbumRepository>();
 builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
 builder.Services.AddScoped<IAlbumService, AlbumService>();
 builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.AddScoped<IUserService,UserService>();
 builder.Services.AddScoped<ITagService,TagService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
@@ -102,6 +105,7 @@ else
 
 //app.UseHttpsRedirection();
 app.UseRouting();
+app.UseAuthentication();//before UseAuthorization
 app.UseAuthorization();
 app.MapControllers();
 

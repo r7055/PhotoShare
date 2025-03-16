@@ -11,7 +11,7 @@
         public string? CurrentTown { get; set; }
         public string? ProfilePicture { get; set; }
         public string? RegisteredOn { get; set; }
-         
+
 
     }
 }

@@ -22,8 +22,6 @@ namespace PhotoShare.Core.Models
 
         public DateTime? UpdatedAt { get; set; }
 
-        public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
-
-        public virtual ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>()
+        public virtual ICollection<Role> Roles { get; set; } = new List<Role>();
     }
 }

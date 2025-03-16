@@ -10,6 +10,6 @@ namespace PhotoShare.Core.IServices
 {
     public interface IUserService:IService<UserDto>
     {
-        Task<UserDto> RegisterUser(UserDto userDto);
+        
     }
 }
