@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
 using PhotoShare.Core.DTOs;
 using PhotoShare.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PhotoShare.Core
 {
@@ -13,7 +8,6 @@ namespace PhotoShare.Core
     {
         public MappingProfile()
         {
-            //CreateMap<User, UserDto>().ReverseMap();
             CreateMap<User, UserDto>()
            .ForMember(dest => dest.Password, opt => opt.Ignore());
             CreateMap<UserDto, User>()
@@ -25,7 +19,7 @@ namespace PhotoShare.Core
         private string HashPassword(string password)
         {
             Console.WriteLine("HashPassword: " + password);
-            return Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(password)); // דוגמה פשוטה
+            return Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(password)); 
         }
     }
 }

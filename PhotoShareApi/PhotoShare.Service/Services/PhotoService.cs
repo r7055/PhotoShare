@@ -24,7 +24,6 @@ namespace PhotoShare.Service.Services
             _mapper = mapper;
         }
 
-
         public async Task UploadPhoto(PhotoDto photoDto)
         {
             // בדוק אם הקובץ המקומי קיים

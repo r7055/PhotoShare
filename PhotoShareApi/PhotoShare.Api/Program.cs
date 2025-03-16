@@ -1,16 +1,12 @@
 
 
-using Microsoft.AspNetCore.Cors.Infrastructure;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Migrations;
 using PhotoShare.Api;
 using PhotoShare.Core.IRepositories;
 using PhotoShare.Core.IServices;
 using PhotoShare.Data;
 using PhotoShare.Data.Repositories;
 using PhotoShare.Service.Services;
-using System.Configuration;
 using PhotoShare.Core;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -63,6 +59,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.MapOpenApi();
     app.UseDeveloperExceptionPage();
     app.UseSwagger(); // десу лап
     app.UseSwaggerUI(c => // десу лап
