@@ -1,96 +1,81 @@
-
 import { useState } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
 import { TextField, Button, Typography, Box, Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../store/userSlice';
+import { RootState, AppDispatch } from '../store/store'; 
 
 const SignIn = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [msg, setMsg] = useState("");
+  const [userLogin, setUserLogin] = useState({ email: '', password: '' });
+  const dispatch = useDispatch<AppDispatch>(); 
   const navigate = useNavigate();
+  const msg = useSelector((state: RootState) => state.user.msg); // קבלת המסר מה-state
 
-  const reset = () => {
-    setUsername("");
-    setPassword("");
-  };
-
-  const onSend = async () => {
-    try {
-      const res = await axios.post("http://localhost:8080/api/user/login", { UserName: username, Password: password });
-      setMsg("Login successful");
-      
-      // setMsg(`hi ${username}!`);
-      saveUser(res.data);
-      navigate("/recipes");
-    } catch (error: any) {
-      // בודקים אם יש תגובה מהשרת
-      if (error.response && error.response.data) {
-        console.error("Server error:", error.response.data);
-        setMsg(error.response.data); // כאן מציגים את הודעת השגיאה שמגיעה מהשרת
-      } else {
-        console.error("Error:", error);
-        setMsg('Login failed, please try again.');
-      }
+  const handleSubmit = async () => {
+    const resultAction = await dispatch(loginUser(userLogin));
+    if (loginUser.fulfilled.match(resultAction)) {
+      navigate('/dashboard'); 
     }
-    reset();
   };
 
   return (
     <>
-    <Box
-      sx={{
-        position: "fixed", // קיבוע ה-Box למסך
-        top: 0,
-        left: 0,
-        height: "100vh", // כיסוי מלא של הגובה
-        width: "100vw", // כיסוי מלא של הרוחב
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "rgba(255, 255, 255, 0.5)", // רקע שקוף למחצה כדי לא להסתיר את תמונת הרקע
-        overflow: "hidden", // מניעת גלילה
-      }}
-    >
-      <Paper
-        elevation={3}
+      <Box
         sx={{
-          padding: 5,
-          borderRadius: "12px",
-          backgroundColor: "rgba(255, 255, 255, 0.8)", // מסגרת לבנה אלגנטית עם שקיפות
-          width: "400px",
-          textAlign: "center",
-          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)", // צל עדין למראה מקצועי
+          position: "fixed",
+          top: 0,
+          left: 0,
+          height: "100vh",
+          width: "100vw",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "rgba(255, 255, 255, 0.5)",
+          overflow: "hidden",
         }}
       >
-        <Typography variant="h4" fontWeight="600" color="text.primary" gutterBottom>
-          התחברות
-        </Typography>
-        <TextField
-          label="Username"
-          value={username}
-          required
-          onChange={({ target }) => setUsername(target.value)}
-          fullWidth
-          sx={{ marginBottom: 2 }}
-        />
-        <TextField
-          label="Password"
-          type="password"
-          required
-          value={password}
-          onChange={({ target }) => setPassword(target.value)}
-          fullWidth
-          sx={{ marginBottom: 2 }}
-        />
-        <Button variant="contained" size="large" onClick={onSend} sx={{ backgroundColor: "#000000", "&:hover": { backgroundColor: "#333333" } }}>
-          כניסה
-        </Button>
-        {msg === "user not found!" && <Link to={"/logup"}>להרשמה הקליקו כאן👇</Link>}
-        {msg && <div>{msg}</div>}
-      </Paper>
-    </Box>
+        <Paper
+          elevation={3}
+          sx={{
+            padding: 5,
+            borderRadius: "12px",
+            backgroundColor: "rgba(255, 255, 255, 0.8)",
+            width: "400px",
+            textAlign: "center",
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          <Typography variant="h4" fontWeight="600" color="text.primary" gutterBottom>
+            התחברות
+          </Typography>
+          <TextField
+            label="UserEmail"
+            value={userLogin.email}
+            required
+            onChange={({ target }) => setUserLogin({ ...userLogin, email: target.value })}
+            fullWidth
+            sx={{ marginBottom: 2 }}
+          />
+          <TextField
+            label="UserPassword"
+            type="password"
+            required
+            value={userLogin.password}
+            onChange={({ target }) => setUserLogin({ ...userLogin, password: target.value })}
+            fullWidth
+            sx={{ marginBottom: 2 }}
+          />
+          <Button
+            variant="contained"
+            size="large"
+            onClick={handleSubmit}
+            sx={{ backgroundColor: "#000000", "&:hover": { backgroundColor: "#333333" } }}
+          >
+            כניסה
+          </Button>
+          {msg && <div style={{ color: 'red' }}>{msg}</div>} {/* הצגת השגיאה כאן */}
+        </Paper>
+      </Box>
     </>
   );
 };

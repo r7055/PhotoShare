@@ -11,7 +11,7 @@ public partial class Photo
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
-    public int? UserId { get; set; }
+    public int UserId { get; set; }
 
     public string Url { get; set; } = null!;
 
@@ -27,5 +27,5 @@ public partial class Photo
 
     public virtual ICollection<Tag> Tags { get; set; } = new List<Tag>();
 
-    public virtual ICollection<User> Users { get; set; }=new list<User>();
+    public  ICollection<User> Viewers { get; set; }=new List<User>();
 }

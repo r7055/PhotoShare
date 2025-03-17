@@ -23,9 +23,12 @@ public partial class User
 
     public DateTime? UpdatedAt { get; set; }
 
-    public virtual ICollection<Role> Roles { get; set; }
+    public virtual ICollection<Role> Roles { get; set; }=new List<Role>();  
 
     public virtual ICollection<Album> Albums { get; set; } = new List<Album>();
 
     public virtual ICollection<Photo> Photos { get; set; } = new List<Photo>();
+
+    public virtual ICollection<Photo> ViewAblePhotos { get; set; } = new List<Photo>();
+
 }

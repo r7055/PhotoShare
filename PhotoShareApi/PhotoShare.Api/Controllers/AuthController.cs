@@ -23,8 +23,8 @@ namespace PhotoShare.Api.Controllers
         {
             try
             {
-                var createdUser = await _authService.RegisterUser(userDto);
-                return CreatedAtAction(nameof(Register), new { id = createdUser.Id }, createdUser);
+                var createdUser = await _authService.RegisterAsync(userDto);
+                return Ok(createdUser);
             }
             catch (Exception ex)
             {
@@ -38,13 +38,13 @@ namespace PhotoShare.Api.Controllers
         {
             try
             {
-                var token = await _authService.LoginUser(userLogin.Email, userLogin.Password);
-                if (token == null)
+                var user = await _authService.LoginAsync(userLogin.Email, userLogin.Password);
+                if (user == null)
                 {
                     return Unauthorized();
                 }
 
-                return Ok(new { Token = token });
+                return Ok(user);
             }
             catch (UnauthorizedAccessException)
             {

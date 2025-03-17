@@ -42,7 +42,7 @@ const Auth = () => {
                         fullWidth
                         variant="contained"
                         color="primary"
-                        onClick={() => navigate("/login")}
+                        onClick={() => navigate("/signin")}
                         sx={{
                             padding: "12px",
                             fontSize: "1rem",
@@ -70,7 +70,7 @@ const Auth = () => {
                             borderColor: "#000000", // מסגרת שחורה
                             "&:hover": { backgroundColor: "#000000", color: "white" }, // רקע שחור בלחיצה
                         }}
-                        onClick={() => navigate("/logup")}
+                        onClick={() => navigate("/signup")}
                         >
                         sign up
                     </Button>

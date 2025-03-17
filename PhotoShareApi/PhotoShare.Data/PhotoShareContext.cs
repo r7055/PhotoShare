@@ -15,5 +15,21 @@ namespace PhotoShare.Data
         public virtual DbSet<Tag> Tags { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<Permission> Permissions { get; set; }
+
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Photo>()
+                .HasOne(p => p.User)
+                .WithMany(u => u.Photos)
+                .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Photo>()
+                .HasMany(p => p.Viewers)
+                .WithMany(u => u.ViewAblePhotos);
+        }
     }
 }

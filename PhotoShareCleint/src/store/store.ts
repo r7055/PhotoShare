@@ -1,18 +1,21 @@
 // store.js
-import { combineSlices, configureStore } from "@reduxjs/toolkit";
-import userSlice from "./userSlice";
-import albumSlice from "./albumSlice";
-import photoSlice from "./photoSlice";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import albumReducer from "./albumSlice";
+import photoReducer from "./photoSlice";
+import userReducer from "./userSlice";
 
-const store = configureStore({
-    reducer: combineSlices(
-        userSlice,
-        albumSlice,
-        photoSlice
-    ),
+const rootReducer = combineReducers({
+    user: userReducer,
+    album: albumReducer,
+    photo: photoReducer,
 });
 
-export type StoreType = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+const store = configureStore({
+    reducer: rootReducer,
+});
+
+export type RootState = ReturnType<typeof store.getState>; // טיפוס ה-State
+export type AppDispatch = typeof store.dispatch; // טיפוס ה-Dispatch
 
 export default store;
+
