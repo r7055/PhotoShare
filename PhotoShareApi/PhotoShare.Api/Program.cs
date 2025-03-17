@@ -74,12 +74,12 @@ builder.Services.AddAuthentication(options =>
 });
 
 // הוספת הרשאות מבוססות-תפקידים
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
-    options.AddPolicy("EditorOrAdmin", policy => policy.RequireRole("Editor", "Admin"));
-    options.AddPolicy("ViewerOnly", policy => policy.RequireRole("Viewer"));
-});
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+//    options.AddPolicy("EditorOrAdmin", policy => policy.RequireRole("Editor", "Admin"));
+//    options.AddPolicy("ViewerOnly", policy => policy.RequireRole("Viewer"));
+//});
 
 
 var app = builder.Build();

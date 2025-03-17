@@ -1,13 +1,16 @@
-export class User {
+export class UserRegister {
     constructor(
-        public id: number,
-        public username: string,
-        public password: string,
-        public email: string,
-        public role: string,
-        public token: string,
         public firstName: string,
         public lastName: string,
-        public birthDate: Date
+        public email: string,
+        public passwordHash: string,
+        // public birthDate: Date
+    ) { }
+}
+
+export class UserLogin {
+    constructor(
+        public email: string,
+        public password: string
     ) { }
 }

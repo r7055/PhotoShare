@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Box, Button, TextField, Typography, Paper } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useUser } from "../context/userContext";
 import axios from "axios";
 
 interface SignupForm {

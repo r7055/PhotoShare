@@ -26,4 +26,6 @@ public partial class Photo
     public virtual ICollection<Album> Albums { get; set; } = new List<Album>();
 
     public virtual ICollection<Tag> Tags { get; set; } = new List<Tag>();
+
+    public virtual ICollection<User> Users { get; set; }=new list<User>();
 }

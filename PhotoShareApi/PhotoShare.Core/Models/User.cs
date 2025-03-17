@@ -27,5 +27,5 @@ public partial class User
 
     public virtual ICollection<Album> Albums { get; set; } = new List<Album>();
 
-    public virtual ICollection<Photo> Photos { get; set; } = new List<Photo>();//??????drop
+    public virtual ICollection<Photo> Photos { get; set; } = new List<Photo>();
 }

@@ -1,16 +1,14 @@
 
-import { useContext, useState } from "react";
-import { useUser } from "../context/userContext";
+import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { TextField, Button, Typography, Box, Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const SignIn = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [msg, setMsg] = useState("");
-  const { saveUser } = useUser(); // גישה לפונקציה ששומרת את המשתמש
   const navigate = useNavigate();
 
   const reset = () => {
@@ -97,4 +95,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignIn;

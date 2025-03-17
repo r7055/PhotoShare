@@ -9,8 +9,6 @@
         public string Email { get; set; } = null!;
         public string? BornTown { get; set; }
         public string? CurrentTown { get; set; }
-        public string? ProfilePicture { get; set; }
-        public string? RegisteredOn { get; set; }
 
 
     }
