@@ -1,38 +1,30 @@
 import { useForm, Controller } from "react-hook-form";
 import { TextField, Button, Typography, Box, Paper } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from "axios";
 import { useState } from "react";
+import { User } from "../types/user";
+import store from "../store/store";
+import { registerUser } from "../store/userSlice";
 
-interface SignupForm {
-  UserName: string;
-  Password: string;
-  Name: string;
-  Phone: string;
-  Email: string;
-  Tz: string;
-}
 
 const Signup = () => {
-  const { control, handleSubmit, formState: { errors, isValid } } = useForm<SignupForm>({ mode: "onChange" });
+  const { control, handleSubmit, formState: { errors, isValid } } = useForm<User>({ mode: "onChange" });
   const [msg, setMsg] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const onSend = async (data: SignupForm) => {
+  const onSend = async (data: User) => {
     setLoading(true);
     setMsg("");
 
     try {
-      const res = await axios.post(
-        "http://localhost:8080/api/user/signup",
-        data,
-        { headers: { "Content-Type": "application/json" } }
-      );
+    
 
-      if (res.data && res.data.Id) {
+     const res=await store.dispatch(registerUser(data));
+
+      if (res.payload && (res.payload as User).id) {
         setMsg("ההרשמה בוצעה בהצלחה! 🎉");
-        navigate("/dashboard");
+        // navigate("/dashboard");
       } else {
         setMsg("שגיאה בהרשמה. נסה שוב.");
       }
@@ -79,16 +71,33 @@ const Signup = () => {
           </Typography>
           <form onSubmit={handleSubmit(onSend)}>
             <Controller
-              name="UserName"
+              name="firstName"
               control={control}
               defaultValue=""
               rules={{ required: "UserName is required" }}
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="UserName"
-                  error={!!errors.UserName}
-                  helperText={errors.UserName ? errors.UserName.message : ''}
+                  label="FirstName"
+                  error={!!errors.firstName}
+                  helperText={errors.firstName ? errors.firstName.message : ''}
+                  required
+                  fullWidth
+                  sx={{ marginBottom: 2 }}
+                />
+              )}
+            />
+             <Controller
+              name="lastName"
+              control={control}
+              defaultValue=""
+              rules={{ required: "UserName is required" }}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="LastName"
+                  error={!!errors.lastName}
+                  helperText={errors.lastName ? errors.lastName.message : ''}
                   required
                   fullWidth
                   sx={{ marginBottom: 2 }}
@@ -96,7 +105,7 @@ const Signup = () => {
               )}
             />
             <Controller
-              name="Password"
+              name="password"
               control={control}
               defaultValue=""
               rules={{
@@ -111,8 +120,8 @@ const Signup = () => {
                   {...field}
                   label="Password"
                   type="password"
-                  error={!!errors.Password}
-                  helperText={errors.Password ? errors.Password.message : ''}
+                  error={!!errors.password}
+                  helperText={errors.password ? errors.password.message : ''}
                   required
                   fullWidth
                   sx={{ marginBottom: 2 }}
@@ -120,41 +129,7 @@ const Signup = () => {
               )}
             />
             <Controller
-              name="Name"
-              control={control}
-              defaultValue=""
-              rules={{ required: "Name is required" }}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Name"
-                  error={!!errors.Name}
-                  helperText={errors.Name ? errors.Name.message : ''}
-                  required
-                  fullWidth
-                  sx={{ marginBottom: 2 }}
-                />
-              )}
-            />
-            <Controller
-              name="Phone"
-              control={control}
-              defaultValue=""
-              rules={{ required: "Phone is required" }}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Phone"
-                  error={!!errors.Phone}
-                  helperText={errors.Phone ? errors.Phone.message : ''}
-                  required
-                  fullWidth
-                  sx={{ marginBottom: 2 }}
-                />
-              )}
-            />
-            <Controller
-              name="Email"
+              name="email"
               control={control}
               defaultValue=""
               rules={{
@@ -168,25 +143,8 @@ const Signup = () => {
                 <TextField
                   {...field}
                   label="Email"
-                  error={!!errors.Email}
-                  helperText={errors.Email ? errors.Email.message : ''}
-                  required
-                  fullWidth
-                  sx={{ marginBottom: 2 }}
-                />
-              )}
-            />
-            <Controller
-              name="Tz"
-              control={control}
-              defaultValue=""
-              rules={{ required: "Tz is required" }}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Tz"
-                  error={!!errors.Tz}
-                  helperText={errors.Tz ? errors.Tz.message : ''}
+                  error={!!errors.email}
+                  helperText={errors.email ? errors.email.message : ''}
                   required
                   fullWidth
                   sx={{ marginBottom: 2 }}

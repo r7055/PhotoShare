@@ -88,14 +88,15 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../store/userSlice';
 import { RootState, AppDispatch } from '../store/store'; 
+import { UserLogin } from "../types/user";
 
 const SignIn = () => {
-  const { control, handleSubmit, formState: { errors } } = useForm<{ email: string; password: string }>();
+  const { control, handleSubmit, formState: { errors } } = useForm<UserLogin>();
   const dispatch = useDispatch<AppDispatch>(); 
   const navigate = useNavigate();
   const msg = useSelector((state: RootState) => state.user.msg); 
 
-  const onSubmit = async (data: { email: string; password: string }) => {
+  const onSubmit = async (data: UserLogin) => {
     const resultAction = await dispatch(loginUser(data));
     if (loginUser.fulfilled.match(resultAction)) {
       navigate('/dashboard'); 

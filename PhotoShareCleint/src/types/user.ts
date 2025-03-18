@@ -1,16 +1,12 @@
-export class UserRegister {
-    constructor(
-        public firstName: string,
-        public lastName: string,
-        public email: string,
-        public password: string,
-        // public birthDate: Date
-    ) { }
+export interface User {
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string,
+    id?: number,
 }
 
-export class UserLogin {
-    constructor(
-        public email: string,
-        public password: string
-    ) { }
+export interface UserLogin {
+    email: string,
+    password: string
 }

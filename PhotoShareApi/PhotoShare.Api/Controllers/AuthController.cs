@@ -4,6 +4,7 @@ using PhotoShare.Core.IServices;
 using System;
 using System.Threading.Tasks;
 using PhotoShare.Api.PostModels;
+using AutoMapper;
 
 namespace PhotoShare.Api.Controllers
 {
@@ -12,18 +13,31 @@ namespace PhotoShare.Api.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
+        private readonly IMapper _mapper;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, IMapper mapper)
         {
             _authService = authService;
+            _mapper = mapper;
         }
 
+
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] UserDto userDto)
+        public async Task<IActionResult> Register([FromBody] UserRegisterPostModel userRegisterPost)
         {
+            if (userRegisterPost == null)
+            {
+                return BadRequest("User registration data is required.");
+            }
             try
             {
+                var userDto = _mapper.Map<UserDto>(userRegisterPost);
                 var createdUser = await _authService.RegisterAsync(userDto);
+                if (createdUser == null)
+                {
+                    return Conflict("This email already exists in the system.");
+                }
+
                 return Ok(createdUser);
             }
             catch (Exception ex)
@@ -34,7 +48,7 @@ namespace PhotoShare.Api.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] UserLogin userLogin)
+        public async Task<IActionResult> Login([FromBody] UserLoginPostModel userLogin)
         {
             try
             {

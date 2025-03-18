@@ -42,7 +42,6 @@ builder.Services.AddDbContext<PhotoShareContext>(options =>
     options.UseMySql(connetionString, ServerVersion.AutoDetect(connetionString),options=>options.CommandTimeout(60)));
 
 
-//services.AddAutoMapper(typeof(MappingProfile), typeof(MappingPostProfile));
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins", builder =>
@@ -104,10 +103,13 @@ else
 }
 
 //app.UseHttpsRedirection();
+
+app.UseCors("AllowAllOrigins"); 
 app.UseRouting();
-app.UseAuthentication();//before UseAuthorization
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
 
 app.Run();
 

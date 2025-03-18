@@ -12,7 +12,8 @@ namespace PhotoShare.Api
             CreateMap<PhotoPostModel, PhotoDto>();
             CreateMap<AlbumPostModel, AlbumDto>();
             CreateMap<TagPostModel, TagDto>();
-            CreateMap<UserPostModel, UserDto>();
+            CreateMap<UserRegisterPostModel, UserDto>();
+            CreateMap<UserLoginPostModel, UserDto>();
         }
     }
 }

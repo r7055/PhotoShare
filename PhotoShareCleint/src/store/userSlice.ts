@@ -1,15 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { UserLogin, UserRegister } from '../types/user';
+import { UserLogin, User } from '../types/user';
 
-const url = 'http://localhost:5141//api/auth';
+const url = 'http://localhost:5141/api/Auth';
 
 // Async thunk for logging in a user
 export const loginUser = createAsyncThunk('user/login',
     async (userData: UserLogin, thunkAPI) => {
         try {
-            const response = await axios.post(`${url}/login`, userData);
-            return response.data;
+            console.log(userData);
+            
+            const response = await axios.post<{ user: User, token: string }>(`${url}/login`, userData);
+            const { user, token } = response.data;
+            sessionStorage.setItem('token', token); 
+            return user;
         } catch (e: any) {  
             return thunkAPI.rejectWithValue(e.message);
         }
@@ -18,10 +22,12 @@ export const loginUser = createAsyncThunk('user/login',
 
 // Async thunk for registering a user
 export const registerUser = createAsyncThunk('user/register',
-    async (userData: UserRegister, thunkAPI) => {
+    async (userData: User, thunkAPI) => {
         try {
-            const response = await axios.post(`${url}/register`, userData);
-            return response.data;
+            const response = await axios.post<{ user: User, token: string }>(`${url}/register`, userData);
+            const { user, token } = response.data;
+            sessionStorage.setItem('token', token); // Save token to session storage
+            return user;
         } catch (e: any) {
             return thunkAPI.rejectWithValue(e.message);
         }
@@ -32,7 +38,7 @@ export const registerUser = createAsyncThunk('user/register',
 const userSlice = createSlice({
     name: 'user',
     initialState: { 
-        user: {} as UserRegister, 
+        user: {} as User, 
         loading: true, 
         msg: '' // הוסף את השדה msg
     },
@@ -40,7 +46,7 @@ const userSlice = createSlice({
     extraReducers: (builder) => {
         builder
         .addCase(loginUser.fulfilled, (state, action) => {
-            state.user = action.payload as UserRegister;
+            state.user = action.payload as User;
             state.loading = false;
             state.msg = ''; // נקה את המסר במקרה של הצלחה
         })
@@ -52,7 +58,7 @@ const userSlice = createSlice({
             state.loading = true;
         })
         .addCase(registerUser.fulfilled, (state, action) => {
-            state.user = action.payload as UserRegister;
+            state.user = action.payload as User;
             state.loading = false;
             state.msg = ''; // נקה את המסר במקרה של הצלחה
         })
