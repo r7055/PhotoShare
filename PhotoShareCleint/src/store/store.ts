@@ -1,4 +1,3 @@
-// store.js
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import albumReducer from "./albumSlice";
 import photoReducer from "./photoSlice";
@@ -14,8 +13,8 @@ const store = configureStore({
     reducer: rootReducer,
 });
 
-export type RootState = ReturnType<typeof store.getState>; // טיפוס ה-State
-export type AppDispatch = typeof store.dispatch; // טיפוס ה-Dispatch
+export type RootState = ReturnType<typeof store.getState>; 
+export type AppDispatch = typeof store.dispatch;
 
 export default store;
 

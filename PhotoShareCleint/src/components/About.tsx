@@ -27,10 +27,6 @@ export default function About() {
 
   const navigate = useNavigate();
 
-  const handleButtonClick = () => {
-    navigate('/auth');
-  };
-
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', padding: '16px', backgroundColor: '#f0f2f5' }}>
       <div style={{ width: '100%', maxWidth: '1200px', textAlign: 'center' }}>
@@ -67,9 +63,9 @@ export default function About() {
           variant="contained" 
           color="primary" 
           style={{ marginTop: '24px', fontWeight: 'bold' }} 
-          onClick={handleButtonClick}
+          onClick={()=>navigate('/auth')}
         >
-          התחל עכשיו ונהל את הזיכרונות שלך במקום אחד!
+          !התחל עכשיו ונהל את הזיכרונות שלך במקום אחד
         </Button>
       </div>
     </div>

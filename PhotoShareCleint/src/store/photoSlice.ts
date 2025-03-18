@@ -1,67 +1,54 @@
-// features/photoSlice.js
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import Swal from "sweetalert2";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
+import { Photo } from '../types/photo';
 
-const url = 'http://localhost:3000/api/photos';
+const url = 'http://localhost:5141/api/Photos';
 
-// Async thunk for fetching photos
-export const fetchPhotos = createAsyncThunk('photos/fetch',
-    async (albumId, thunkAPI) => {
+// Async thunk for searching all photos
+export const searchAllPhotos = createAsyncThunk('photos/searchAllPhotos',
+    async ({ token, query }: { token: string; query: string }, thunkAPI) => {
         try {
-            const response = await axios.get(`${url}?albumId=${albumId}`);
+            const response = await axios.get<Photo[]>(`${url}/search`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                params: { query },
+            });
             return response.data;
-        } catch (e) {
+        } catch (e: any) {
             return thunkAPI.rejectWithValue(e.message);
         }
     }
 );
 
-// Async thunk for adding a photo
-export const addPhoto = createAsyncThunk('photos/add',
-    async (photoData, thunkAPI) => {
-        try {
-            const response = await axios.post(url, photoData);
-            return response.data.photo;
-        } catch (e) {
-            return thunkAPI.rejectWithValue(e.message);
-        }
-    }
-);
-
-const photoSlice = createSlice({
+const photosSlice = createSlice({
     name: 'photos',
-    initialState: { list: [], loading: true },
-    reducers: {},
+    initialState: {
+        photos: [] as Photo[],
+        loading: false,
+        msg: '',
+    },
+    reducers: {
+        clearMessage: (state) => {
+            state.msg = '';
+        },
+    },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchPhotos.fulfilled, (state, action) => {
-                state.list = action.payload;
+            .addCase(searchAllPhotos.fulfilled, (state, action) => {
+                state.photos = action.payload;
                 state.loading = false;
+                state.msg = '';
             })
-            .addCase(fetchPhotos.rejected, () => {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Couldn't fetch photos",
-                });
+            .addCase(searchAllPhotos.rejected, (state, action) => {
+                state.loading = false;
+                state.msg = action.payload as string || "Failed to search all photos";
             })
-            .addCase(addPhoto.fulfilled, (state, action) => {
-                state.list.push(action.payload);
-                Swal.fire({
-                    title: "Photo Added",
-                    text: "The photo was successfully added.",
-                    icon: "success",
-                });
-            })
-            .addCase(addPhoto.rejected, () => {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Photo wasn't successfully added",
-                });
+            .addCase(searchAllPhotos.pending, (state) => {
+                state.loading = true;
             });
-    }
+    },
 });
 
-export default photoSlice.reducer;
+export const { clearMessage } = photosSlice.actions;
+export default photosSlice.reducer;

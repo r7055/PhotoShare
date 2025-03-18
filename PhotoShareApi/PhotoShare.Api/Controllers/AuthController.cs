@@ -8,7 +8,7 @@ using AutoMapper;
 
 namespace PhotoShare.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {

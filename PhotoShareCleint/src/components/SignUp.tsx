@@ -13,7 +13,7 @@ const Signup = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const onSend = async (data: User) => {
+  const onSubmit = async (data: User) => {
     setLoading(true);
     setMsg("");
 
@@ -24,7 +24,7 @@ const Signup = () => {
 
       if (res.payload && (res.payload as User).id) {
         setMsg("ההרשמה בוצעה בהצלחה! 🎉");
-        // navigate("/dashboard");
+        navigate("/albumList");
       } else {
         setMsg("שגיאה בהרשמה. נסה שוב.");
       }
@@ -69,7 +69,7 @@ const Signup = () => {
           <Typography variant="h4" fontWeight="600" color="text.primary" gutterBottom>
             הרשמה
           </Typography>
-          <form onSubmit={handleSubmit(onSend)}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <Controller
               name="firstName"
               control={control}

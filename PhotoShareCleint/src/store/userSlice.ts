@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { UserLogin, User } from '../types/user';
 
-const url = 'http://localhost:5141/api/Auth';
+const url = 'http://localhost:5141/api/auth';
 
 // Async thunk for logging in a user
 export const loginUser = createAsyncThunk('user/login',
