@@ -9,6 +9,9 @@ using PhotoShare.Core;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Amazon.S3;
+using Amazon.Extensions.NETCore.Setup;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,8 +24,8 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
 builder.Services.AddScoped<IAlbumService, AlbumService>();
 builder.Services.AddScoped<IPhotoService, PhotoService>();
-builder.Services.AddScoped<IUserService,UserService>();
-builder.Services.AddScoped<ITagService,TagService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
@@ -32,15 +35,31 @@ builder.Services.AddAutoMapper(typeof(MappingPostProfile), typeof(MappingProfile
 
 builder.Services.AddControllers();
 
+builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+builder.Services.AddSingleton<IAmazonS3>(serviceProvider =>
+{
+    var options = serviceProvider.GetRequiredService<IOptions<AWSOptions>>().Value;
+
+    // הגדרת Credentials באופן ידני
+    var credentials = new Amazon.Runtime.BasicAWSCredentials(
+        builder.Configuration["AWS:AccessKey"],
+        builder.Configuration["AWS:SecretKey"]
+    );
+
+    // הגדרת Region
+    var region = Amazon.RegionEndpoint.GetBySystemName(builder.Configuration["AWS:Region"]);
+
+    return new AmazonS3Client(credentials, region);
+});
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 builder.Services.AddSwaggerGen();
 
-var connetionString = builder.Configuration.GetConnectionString("PhotoShareContext");  
+var connectionString = builder.Configuration.GetConnectionString("PhotoShareContext");
 builder.Services.AddDbContext<PhotoShareContext>(options =>
-    options.UseMySql(connetionString, ServerVersion.AutoDetect(connetionString),options=>options.CommandTimeout(60)));
-
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), options => options.CommandTimeout(60)));
 
 builder.Services.AddCors(options =>
 {
@@ -52,7 +71,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-// הוספת JWT Authentication
+// Add JWT Authentication
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -72,14 +91,13 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// הוספת הרשאות מבוססות-תפקידים
+// Add role-based authorization
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
     options.AddPolicy("EditorOrAdmin", policy => policy.RequireRole("Editor", "Admin"));
-    //options.AddPolicy("ViewerOnly", policy => policy.RequireRole("Viewer"));
+    // options.AddPolicy("ViewerOnly", policy => policy.RequireRole("Viewer"));
 });
-
 
 var app = builder.Build();
 
@@ -88,13 +106,12 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.UseDeveloperExceptionPage();
-    app.UseSwagger(); // הוסף כאן
-    app.UseSwaggerUI(c => // הוסף כאן
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "PhotoShare API V1");
-        c.RoutePrefix = string.Empty; // כדי לגשת ל-Swagger ב-root
+        c.RoutePrefix = string.Empty; // To access Swagger at the root
     });
-
 }
 else
 {
@@ -102,15 +119,12 @@ else
     app.UseHsts();
 }
 
-//app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
-app.UseCors("AllowAllOrigins"); 
+app.UseCors("AllowAllOrigins");
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-
 app.Run();
-
-

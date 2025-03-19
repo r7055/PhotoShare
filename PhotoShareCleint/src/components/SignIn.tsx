@@ -99,7 +99,7 @@ const SignIn = () => {
   const onSubmit = async (data: UserLogin) => {
     const resultAction = await dispatch(loginUser(data));
     if (loginUser.fulfilled.match(resultAction)) {
-      navigate('/albumList'); 
+      navigate('/upload'); 
     }
   };
 
